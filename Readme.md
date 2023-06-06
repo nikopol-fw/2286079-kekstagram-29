@@ -1,6 +1,6 @@
-# Личный проект «{{projectTitle}}»
+# Личный проект «Кекстаграм»
 
-* Студент: [{{userName}}]({{userProfile}}).
+* Студент: [Наталья Моисеева](https://up.htmlacademy.ru/javascript/28/student/2286079).
 * Наставник: `Неизвестно`.
 
 ---
