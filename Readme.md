@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Наталья Моисеева](https://up.htmlacademy.ru/javascript/28/student/2286079).
-* Наставник: `Неизвестно`.
+* Наставник: [Николай Думчев](https://htmlacademy.ru/profile/nikopol-fw).
 
 ---
 
