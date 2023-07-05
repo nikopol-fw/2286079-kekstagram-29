@@ -9,7 +9,7 @@ const createPictures = ({url, likes, comments}) => {
   return pictureElement;
 };
 
-const renderPictures = (pictures) => {
+const renderPicture = (pictures) => {
   const pictureFragment = document.createDocumentFragment();
   pictures.forEach((picture) => {
     const newPictureElement = createPictures(picture);
@@ -18,4 +18,4 @@ const renderPictures = (pictures) => {
   picturesContainer.append(pictureFragment);
 };
 
-export {renderPictures};
+export {renderPicture};

@@ -1,5 +1,7 @@
 import {similarPhoto} from './data.js';
-import {renderPictures} from './pictures.js';
+import {renderPicture} from './pictures.js';
 
-renderPictures(similarPhoto());
+const photos = similarPhoto();
+
+renderPicture(photos);
 
