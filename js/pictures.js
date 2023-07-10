@@ -1,15 +1,22 @@
-const picturesContainer = document.querySelector('.pictures');
-const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+import { openBigPicture } from './big-pictures.js';
 
-const createPictures = ({url, likes, comments}) => {
+const picturesContainer = document.querySelector('.pictures');
+const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture')
+
+const createPictures = (data) => {
   const pictureElement = pictureTemplate.cloneNode(true);
-  pictureElement.querySelector('.picture__img').src = url;
-  pictureElement.querySelector('.picture__likes').textContent = likes;
-  pictureElement.querySelector('.picture__comments').textContent = comments.length;
+  pictureElement.querySelector('.picture__img').src = data.url;
+  pictureElement.querySelector('.picture__likes').textContent = data.likes;
+  pictureElement.querySelector('.picture__comments').textContent = data.comments.length;
+
+  pictureElement.addEventListener('click', () => {
+    openBigPicture(data);
+  });
+
   return pictureElement;
 };
 
-const renderPicture = (pictures) => {
+const renderPictures = (pictures) => {
   const pictureFragment = document.createDocumentFragment();
   pictures.forEach((picture) => {
     const newPictureElement = createPictures(picture);
@@ -18,4 +25,5 @@ const renderPicture = (pictures) => {
   picturesContainer.append(pictureFragment);
 };
 
-export {renderPicture};
+export {renderPictures};
+

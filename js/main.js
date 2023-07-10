@@ -1,7 +1,7 @@
-import {similarPhoto} from './data.js';
-import {renderPicture} from './pictures.js';
+import {arrayOfPhotos} from './data.js';
+import {renderPictures} from './pictures.js';
 
-const photos = similarPhoto();
+const photos = arrayOfPhotos();
 
-renderPicture(photos);
+renderPictures(photos);
 

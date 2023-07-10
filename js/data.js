@@ -49,7 +49,7 @@ const createMessage = () => Array.from({length: getRandomInteger(1, 2)}, () => g
 const createComment = () => ({
   id: generatorCommentId(),
   avatar: `img/avatar-${ getRandomInteger(1, 6) }.svg`,
-  massage: createMessage(),
+  message: createMessage(),
   name: getRandomArrayElement(NAMES),
 });
 
@@ -64,8 +64,8 @@ const createPhoto = () => ({
 });
 
 /**Массивоподобный объект */
-const similarPhoto = () =>
+const arrayOfPhotos = () =>
   Array.from({length: PHOTO_COUNT}, (_, PhotoIndex) => createPhoto(PhotoIndex + 1)
   );
 
-export {similarPhoto};
+export {arrayOfPhotos};
