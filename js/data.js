@@ -3,7 +3,7 @@ import {getRandomInteger, createIdGenerator,getRandomArrayElement} from './util.
 const PHOTO_COUNT = 25;
 const LIKE_MIN_COUNT = 15;
 const LIKE_MAX_COUNT = 200;
-const COMMENTS_COUNT = 5;
+const COMMENTS_COUNT = 25;
 const NAMES = ['Антон', 'Василиса', 'Дана', 'Роман', 'Дима', 'Света', 'Лилия', 'Марк', 'Матвей', 'Тимофей', 'Кирилл', 'Мария', 'Леся', 'Олег'];
 const MESSAGES = [
   'Всё отлично!',
@@ -49,7 +49,7 @@ const createMessage = () => Array.from({length: getRandomInteger(1, 2)}, () => g
 const createComment = () => ({
   id: generatorCommentId(),
   avatar: `img/avatar-${ getRandomInteger(1, 6) }.svg`,
-  massage: createMessage(),
+  message: createMessage(),
   name: getRandomArrayElement(NAMES),
 });
 
@@ -64,8 +64,8 @@ const createPhoto = () => ({
 });
 
 /**Массивоподобный объект */
-const similarPhoto = () =>
+const arrayOfPhotos = () =>
   Array.from({length: PHOTO_COUNT}, (_, PhotoIndex) => createPhoto(PhotoIndex + 1)
   );
 
-export {similarPhoto};
+export {arrayOfPhotos};
