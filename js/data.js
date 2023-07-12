@@ -3,7 +3,7 @@ import {getRandomInteger, createIdGenerator,getRandomArrayElement} from './util.
 const PHOTO_COUNT = 25;
 const LIKE_MIN_COUNT = 15;
 const LIKE_MAX_COUNT = 200;
-const COMMENTS_COUNT = 5;
+const COMMENTS_COUNT = 25;
 const NAMES = ['Антон', 'Василиса', 'Дана', 'Роман', 'Дима', 'Света', 'Лилия', 'Марк', 'Матвей', 'Тимофей', 'Кирилл', 'Мария', 'Леся', 'Олег'];
 const MESSAGES = [
   'Всё отлично!',
