@@ -109,4 +109,4 @@ const openBigPicture = (data) => {
   }
 };
 
-export {openBigPicture};
+export {openBigPicture, classHidden, classModalOpen};
