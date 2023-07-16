@@ -35,9 +35,7 @@ const normalizeTags = (tagString) => tagString
   .split(' ')
   .filter((tag) => Boolean(tag.length));
 
-const isValidHashtag = (value) => {
-  normalizeTags(value).every((tag) => HASHTAG_REGEXP.test(tag));
-};
+const isValidHashtag = (value) => normalizeTags(value).every((tag) => HASHTAG_REGEXP.test(tag));
 
 pristine.addValidator(hashtag, isValidHashtag, errorText.validTagSymbol);
 
@@ -69,7 +67,7 @@ const isTextFieldFocused = () =>
   document.activeElement === comment;
 
 function onDocumentKeydown (evt) {
-  if (isEscapeKey(evt) && ! isTextFieldFocused) {
+  if (isEscapeKey(evt) && ! isTextFieldFocused()) {
     evt.preventDefault();
     closeForm();
   }
