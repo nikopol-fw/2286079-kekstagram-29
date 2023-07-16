@@ -64,8 +64,12 @@ const closeForm = () => {
 };
 
 /** Закрытие по кнопке Esc */
+const isTextFieldFocused = () =>
+  document.activeElement === hashtag ||
+  document.activeElement === comment;
+
 function onDocumentKeydown (evt) {
-  if (isEscapeKey(evt)) {
+  if (isEscapeKey(evt) && ! isTextFieldFocused) {
     evt.preventDefault();
     closeForm();
   }
