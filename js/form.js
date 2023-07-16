@@ -5,6 +5,12 @@ const HASHTAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i;
 const MAX_HASHTAG_AMOUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
 
+const errorText = {
+  validTagSymbol: 'Содержит недопустимые символы',
+  validTagCount: `Допустимо не более ${MAX_HASHTAG_AMOUNT} хэштегов`,
+  validTagUnique: 'Хэштег не должен повторяться',
+};
+
 const body = document.body;
 const form = document.querySelector('.img-upload__form');
 const fileField = form.querySelector('#upload-file');
@@ -24,13 +30,28 @@ const validateComment = (value) => value.length <= MAX_COMMENT_LENGTH;
 pristine.addValidator(comment, validateComment);
 
 /** Валидация хэштега */
-const isValidHashtag = (tag) => HASHTAG_REGEXP.test(tag);
-const isValidHashtagCount = (tags) => tags.length <= MAX_HASHTAG_AMOUNT;
-const isValidHashtagUnique = (tags) => tags.include(hashtag);
+const normalizeTags = (tagString) => tagString
+  .trim()
+  .split(' ')
+  .filter((tag) => Boolean(tag.length));
 
-pristine.addValidator(hashtag, isValidHashtag, 'Содержит недопустимые символы');
-pristine.addValidator(hashtag, isValidHashtagCount, `Допустимо не более ${MAX_HASHTAG_AMOUNT} хэштегов`);
-pristine.addValidator(hashtag, isValidHashtagUnique, 'Хэштег не должен повторяться');
+const isValidHashtag = (value) => {
+  normalizeTags(value).every((tag) => HASHTAG_REGEXP.test(tag));
+};
+
+pristine.addValidator(hashtag, isValidHashtag, errorText.validTagSymbol);
+
+const isValidHashtagCount = (value) => normalizeTags(value).length <= MAX_HASHTAG_AMOUNT;
+
+pristine.addValidator(hashtag, isValidHashtagCount, errorText.validTagCount);
+
+const isValidHashtagUnique = (value) => {
+  const lowerCaseTag = normalizeTags(value).map((tag) =>
+    tag.toLowerCase());
+  return lowerCaseTag.length === new Set(lowerCaseTag).size;
+};
+
+pristine.addValidator(hashtag, isValidHashtagUnique, errorText.validTagUnique);
 
 /** Закрывает форму редактирования изображения */
 const closeForm = () => {
