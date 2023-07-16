@@ -1,5 +1,7 @@
 import { classHidden, classModalOpen } from './big-pictures.js';
-import {isEscapeKey} from './util.js';
+import { isEscapeKey } from './util.js';
+import { scaleReset } from './scale.js';
+import { effectsReset } from './effect.js';
 
 const HASHTAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i;
 const MAX_HASHTAG_AMOUNT = 5;
@@ -59,6 +61,8 @@ const closeForm = () => {
   cancelButton.removeEventListener('click', onCancelButtonClick);
   form.reset();
   pristine.reset();
+  scaleReset();
+  effectsReset();
 };
 
 /** Закрытие по кнопке Esc */
@@ -101,4 +105,4 @@ const getFormActive = () => {
   fileField.addEventListener('change', onFormChange);
 };
 
-export {getFormActive};
+export { getFormActive };
