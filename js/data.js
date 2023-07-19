@@ -64,8 +64,8 @@ const createPhoto = () => ({
 });
 
 /**Массивоподобный объект */
-const arrayOfPhotos = () =>
+const createPhotos = () =>
   Array.from({length: PHOTO_COUNT}, (_, PhotoIndex) => createPhoto(PhotoIndex + 1)
   );
 
-export {arrayOfPhotos};
+export {createPhotos};
