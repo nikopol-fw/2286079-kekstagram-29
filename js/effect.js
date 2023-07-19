@@ -1,5 +1,5 @@
 import { imagePreview } from './scale.js';
-import { classHidden } from './big-pictures.js';
+import { CLASS_HIDDEN } from './big-pictures.js';
 
 const EFFECTS = [
   {
@@ -69,12 +69,12 @@ const isDefault = () => chosenEffect === DEFAULT_EFFECT;
 
 /** Показ слайдера */
 const openSlider = () => {
-  sliderContainer.classList.remove(classHidden);
+  sliderContainer.classList.remove(CLASS_HIDDEN);
 };
 
 /** Скрытие слайдера */
 const closeSlider = () => {
-  sliderContainer.classList.add(classHidden);
+  sliderContainer.classList.add(CLASS_HIDDEN);
 };
 
 /** Обновление слайдера для эффекта */
@@ -108,11 +108,9 @@ const onEffectsChange = (evt) => {
 /** Обработчик при изменении слайдера */
 const onSliderUpdate = () => {
   const sliderValue = sliderElement.noUiSlider.get();
-  if (isDefault()) {
-    imagePreview.style.filter = DEFAULT_EFFECT.style;
-  } else {
-    imagePreview.style.filter = `${chosenEffect.style}(${sliderValue}${chosenEffect.unit})`;
-  }
+  imagePreview.style.filter = isDefault()
+    ? DEFAULT_EFFECT.style
+    : `${chosenEffect.style}(${sliderValue}${chosenEffect.unit})`;
   effectInput.value = sliderValue;
 };
 
@@ -133,9 +131,10 @@ noUiSlider.create(sliderElement, {
   connect: 'lower',
 });
 
-closeSlider();
+const initEffect = () => {
+  effectElements.addEventListener('change', onEffectsChange);
+  sliderElement.noUiSlider.on('update', onSliderUpdate);
+  closeSlider();
+};
 
-effectElements.addEventListener('change', onEffectsChange);
-sliderElement.noUiSlider.on('update', onSliderUpdate);
-
-export { effectsReset };
+export { effectsReset, initEffect };
