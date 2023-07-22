@@ -1,14 +1,13 @@
-//import { createPhotos } from './data.js';
 import { renderPictures } from './pictures.js';
 import { getFormActive } from './form.js';
+import { getData } from './API.js';
+import { showAlert } from './decor-message.js';
 
-//const photos = createPhotos();
+try {
+  const data = await getData();
+  renderPictures(data);
+} catch (err) {
+  showAlert(err.message);
+}
 
-//renderPictures();
 getFormActive();
-
-fetch('https://28.javascript.pages.academy/kekstagram/data')
-  .then((response) => response.json())
-  .then((data) => {
-    renderPictures(data);
-  });

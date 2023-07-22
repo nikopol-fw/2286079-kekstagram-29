@@ -2,76 +2,52 @@ import { isEscapeKey } from './util.js';
 
 const errorMessageTemplate = document.querySelector('#error')
   .content.querySelector('.error');
+const errorMessage = errorMessageTemplate.cloneNode(true);
+const error = document.querySelector('.error');
+const errorButton = document.querySelector('.error__button');
+
 const successMessageTemplate = document.querySelector('#success')
   .content.querySelector('.success');
+const successMessage = successMessageTemplate.cloneNode(true);
+const success = document.querySelector('.success');
+const successButton = document.querySelector('.success__button');
 
-let errorMessage;
-let successMessage;
+/** Закрыть сообщение */
+const closeMessage = () => {
+  const message = error || success;
+  message.remove();
+  document.removeEventListener('keydown', onDocumentKeydown);
+  document.body.removeEventListener('click', onBodyClick);
+};
 
-/** Закрыть сообщение об ошибке */
-const closeErrorMessage = () => {
+/** Показать сообщение */
+const showMessage = (message, buttonMessage) => {
+  document.body.append(message);
+  buttonMessage.addEventListener('click', closeMessage);
   document.addEventListener('keydown', onDocumentKeydown);
-  document.addEventListener('click', onErrorDocumentClick);
-  errorMessage.addEventListener('click', onCloseErrorMessageClick);
-};
-
-/** Закрыть сообщение об отправке */
-const closeSuccessMessage = () => {
-  document.addEventListener('keydown', onDocumentKeydown);
-  document.addEventListener('click', onSuccessDocumentClick);
-  successMessage.addEventListener('click', onCloseSuccessMessageClick);
-};
-
-/** Показать сообщение об ошибке */
-const showErrorMessage = () => {
-  errorMessage = errorMessageTemplate.cloneNode(true);
-  document.body.append(errorMessage);
-  closeErrorMessage();
-};
-
-/** Показать сообщение об отправке */
-const showSuccessMessage = () => {
-  successMessage = successMessageTemplate.cloneNode(true);
-  document.body.append(successMessage);
-  closeSuccessMessage();
+  document.body.addEventListener('click', onBodyClick);
 };
 
 /** Закрытие по Escape */
 function onDocumentKeydown (evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    if (errorMessage) {
-      closeErrorMessage();
-      return;
-    }
-    closeSuccessMessage();
-  }
-}
-
-/** Закрытие по клику */
-function onCloseSuccessMessageClick(evt) {
-  if (!evt.target.classList.conains('.success__button')) {
-    closeSuccessMessage();
-  }
-}
-
-function onSuccessDocumentClick(evt) {
-  if (!evt.target.classList.conains('.success__inner')) {
-    closeErrorMessage();
+    closeMessage();
   }
 }
 
 /** Закрытие по по клику на произвольную область */
-function onCloseErrorMessageClick(evt) {
-  if (!evt.target.classList.conains('.error__button')) {
-    closeErrorMessage();
+function onBodyClick(evt) {
+  if (
+    !evt.target.classList.conains('.success__inner') ||
+    !evt.target.classList.conains('.error__inner')
+  ) {
+    return;
   }
+  closeMessage();
 }
 
-function onErrorDocumentClick(evt) {
-  if (!evt.target.classList.conains('.error__inner')) {
-    closeErrorMessage();
-  }
-}
+const showSuccessMessage = () => showMessage(successMessage, successButton);
+const showErrorMessage = () => showMessage(errorMessage, errorButton);
 
 export { showErrorMessage, showSuccessMessage};
