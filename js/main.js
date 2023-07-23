@@ -1,20 +1,11 @@
 import { renderPictures } from './pictures.js';
-import { getFormActive, } from './form.js';
-import { getData } from './API.js';
+import { getFormActive, closeForm} from './form.js';
+import { getData, sendData } from './api.js';
 import { showAlert } from './decor-message.js';
 import { setFormSubmit } from './form.js';
+import { showErrorMessage, showSuccessMessage } from './send-message.js';
 
 /** Получаем данные с сервера */
-/*getData()
-  .then((data) => {
-    renderPictures(data);
-  })
-  .catch(
-    (err) => {
-      showAlert(err.message);
-    }
-  );*/
-
 try {
   const data = await getData();
   renderPictures(data);
@@ -25,7 +16,6 @@ try {
 /** Отправляем данные на сервер */
 setFormSubmit(async (data) => {
   try {
-    //debugger;
     await sendData(data);
     closeForm();
     showSuccessMessage();

@@ -2,8 +2,6 @@ import { CLASS_HIDDEN, CLASS_MODAL_OPEN } from './big-pictures.js';
 import { isEscapeKey } from './util.js';
 import { scaleReset, initScale } from './scale.js';
 import { effectsReset, initEffect } from './effect.js';
-import { sendData } from './API.js';
-import { showErrorMessage } from './send-message.js';
 
 const HASHTAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i;
 const MAX_HASHTAG_AMOUNT = 5;
@@ -125,22 +123,6 @@ const getFormActive = () => {
   initUploadForm();
 };
 
-/*const setFormSubmit = (onSuccess) => {
-  form.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    const isValid = pristine.validate();
-    if (isValid) {
-      blockSubmitButton();
-      sendData(new FormData(evt.target))
-        .then(onSuccess)
-        .catch((err) => {
-          showErrorMessage(err);
-        })
-        .finally(unblockSubmitButton);
-    }
-  });
-};*/
-
 const setFormSubmit = (cb) => {
   form.addEventListener('submit', async (evt) => {
     evt.preventDefault();
@@ -154,4 +136,4 @@ const setFormSubmit = (cb) => {
   });
 };
 
-export { getFormActive, setFormSubmit };
+export { getFormActive, setFormSubmit, closeForm };
