@@ -13,12 +13,18 @@ const errorText = {
   validTagUnique: 'Хэштег не должен повторяться',
 };
 
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Отправляю...',
+};
+
 const form = document.querySelector('.img-upload__form');
 const fileField = form.querySelector('#upload-file');
 const overlay = form.querySelector('.img-upload__overlay');
 const cancelButton = form.querySelector('.img-upload__cancel');
 const hashtag = form.querySelector('.text__hashtags');
 const comment = form.querySelector('.text__description');
+const submitButton = form.querySelector('#upload-submit');
 
 let pristine;
 
@@ -70,6 +76,17 @@ function onCancelButtonClick (evt) {
   evt.preventDefault();
   closeForm();
 }
+
+/**Блокировка кнопки отправки */
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
 
 /** Валидация при отправке формы */
 function onFormSubmit (evt) {
