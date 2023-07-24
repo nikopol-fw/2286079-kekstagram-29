@@ -1,5 +1,5 @@
 import { renderPictures } from './pictures.js';
-import { getFormActive, closeForm} from './form.js';
+import { closeForm} from './form.js';
 import { getData, sendData } from './api.js';
 import { showAlert } from './decor-message.js';
 import { setFormSubmit } from './form.js';
@@ -23,6 +23,3 @@ setFormSubmit(async (data) => {
     showErrorMessage();
   }
 });
-
-getFormActive();
-

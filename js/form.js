@@ -88,12 +88,6 @@ const unblockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.IDLE;
 };
 
-/** Валидация при отправке формы */
-function onFormSubmit (evt) {
-  evt.preventDefault();
-  pristine.validate();
-}
-
 /** Показывает форму редактирования изображения */
 const openForm = () => {
   overlay.classList.remove(CLASS_HIDDEN);
@@ -104,14 +98,7 @@ const openForm = () => {
 
 const onFormChange = () => openForm();
 
-const initUploadForm = () => {
-  form.addEventListener('submit', onFormSubmit);
-  fileField.addEventListener('change', onFormChange);
-  initEffect();
-  initScale();
-};
-
-const getFormActive = () => {
+const setFormSubmit = (cb) => {
   pristine = new Pristine(form, {
     classTo: 'img-upload__field-wrapper',
     errorTextParent: 'img-upload__field-wrapper',
@@ -120,10 +107,6 @@ const getFormActive = () => {
   pristine.addValidator(hashtag, isValidHashtag, errorText.validTagSymbol);
   pristine.addValidator(hashtag, isValidHashtagCount, errorText.validTagCount);
   pristine.addValidator(hashtag, isValidHashtagUnique, errorText.validTagUnique);
-  initUploadForm();
-};
-
-const setFormSubmit = (cb) => {
   form.addEventListener('submit', async (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
@@ -134,6 +117,9 @@ const setFormSubmit = (cb) => {
       unblockSubmitButton();
     }
   });
+  fileField.addEventListener('change', onFormChange);
+  initEffect();
+  initScale();
 };
 
-export { getFormActive, setFormSubmit, closeForm };
+export { setFormSubmit, closeForm };
