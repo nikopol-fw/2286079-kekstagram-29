@@ -1,9 +1,9 @@
-import {isEscapeKey} from './util.js';
+import { isEscapeKey } from './util.js';
 
 const ONE_TIME_COMMENTS_LOADING = 5;
 
-const classHidden = 'hidden';
-const classModalOpen = 'modal-open';
+const CLASS_HIDDEN = 'hidden';
+const CLASS_MODAL_OPEN = 'modal-open';
 
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImage = bigPicture.querySelector('.big-picture__img').querySelector('img');
@@ -22,10 +22,10 @@ let comments = [];
 
 /** Закрывает полноэкр.просмотр фото */
 const closeBigPicture = () => {
-  bigPicture.classList.add(classHidden);
-  commentCount.classList.remove(classHidden);
-  commentsLoader.classList.remove(classHidden);
-  document.body.classList.remove(classModalOpen);
+  bigPicture.classList.add(CLASS_HIDDEN);
+  commentCount.classList.remove(CLASS_HIDDEN);
+  commentsLoader.classList.remove(CLASS_HIDDEN);
+  document.body.classList.remove(CLASS_MODAL_OPEN);
   document.removeEventListener('keydown', onDocumentKeydown);
   bigPictureCloseButton.removeEventListener('click', onBigPictureCloseClick);
   commentsLoader.removeEventListener('click', onCommentsLoadingClick);
@@ -60,11 +60,11 @@ function createComment(data) {
 const renderComments = () => {
   showCommentCount += ONE_TIME_COMMENTS_LOADING;
   if (comments.length <= showCommentCount) {
-    commentsLoader.classList.add(classHidden);
-    commentCount.classList.add(classHidden);
+    commentsLoader.classList.add(CLASS_HIDDEN);
+    commentCount.classList.add(CLASS_HIDDEN);
     showCommentCount = comments.length;
   } else {
-    commentsLoader.classList.remove(classHidden);
+    commentsLoader.classList.remove(CLASS_HIDDEN);
   }
 
   const fragment = document.createDocumentFragment();
@@ -77,7 +77,7 @@ const renderComments = () => {
 
   commentsList.innerHTML = '';
   commentsList.append(fragment);
-  commentCount.classList.remove(classHidden);
+  commentCount.classList.remove(CLASS_HIDDEN);
 };
 
 /** Создает элементы полноэкр. фото */
@@ -95,18 +95,18 @@ function onCommentsLoadingClick() {
 
 /** Открывает полноэкр.просмотр фото */
 const openBigPicture = (data) => {
-  bigPicture.classList.remove(classHidden);
-  document.body.classList.add(classModalOpen);
+  bigPicture.classList.remove(CLASS_HIDDEN);
+  document.body.classList.add(CLASS_MODAL_OPEN);
   document.addEventListener('keydown', onDocumentKeydown);
   bigPictureCloseButton.addEventListener('click', onBigPictureCloseClick);
   commentsLoader.addEventListener('click', onCommentsLoadingClick);
   createBigPictures(data);
-  commentCount.classList.add(classHidden);
-  commentsLoader.classList.add(classHidden);
+  commentCount.classList.add(CLASS_HIDDEN);
+  commentsLoader.classList.add(CLASS_HIDDEN);
   comments = data.comments;
   if (comments.length > 0) {
     renderComments();
   }
 };
 
-export {openBigPicture, classHidden, classModalOpen};
+export { openBigPicture, CLASS_HIDDEN, CLASS_MODAL_OPEN };

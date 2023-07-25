@@ -36,9 +36,11 @@ const onButtonBiggerClick = () => {
   scaleImage(newValue);
 };
 
-buttonBigger.addEventListener('click', onButtonBiggerClick);
+const initScale = () => {
+  buttonBigger.addEventListener('click', onButtonBiggerClick);
+};
 
 /** Сброс настроек масштаба */
 const scaleReset = () => scaleImage(SCALE_DEFAULT);
 
-export {scaleReset, imagePreview};
+export { scaleReset, initScale, imagePreview };

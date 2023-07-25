@@ -1,7 +1,7 @@
-import { classHidden, classModalOpen } from './big-pictures.js';
+import { CLASS_HIDDEN, CLASS_MODAL_OPEN } from './big-pictures.js';
 import { isEscapeKey } from './util.js';
-import { scaleReset } from './scale.js';
-import { effectsReset } from './effect.js';
+import { scaleReset, initScale } from './scale.js';
+import { effectsReset, initEffect } from './effect.js';
 
 const HASHTAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i;
 const MAX_HASHTAG_AMOUNT = 5;
@@ -13,37 +13,33 @@ const errorText = {
   validTagUnique: 'Хэштег не должен повторяться',
 };
 
-const body = document.body;
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Отправляю...',
+};
+
 const form = document.querySelector('.img-upload__form');
 const fileField = form.querySelector('#upload-file');
 const overlay = form.querySelector('.img-upload__overlay');
 const cancelButton = form.querySelector('.img-upload__cancel');
 const hashtag = form.querySelector('.text__hashtags');
 const comment = form.querySelector('.text__description');
+const submitButton = form.querySelector('#upload-submit');
 
-
-const pristine = new Pristine(form, {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper',
-});
+let pristine;
 
 /** Валидация длины комментария */
 const validateComment = (value) => value.length <= MAX_COMMENT_LENGTH;
-pristine.addValidator(comment, validateComment);
 
 /** Валидация хэштега */
 const normalizeTags = (tagString) => tagString
   .trim()
   .split(' ')
-  .filter((tag) => Boolean(tag.length));
+  .filter((tag) => !!tag.length);
 
 const isValidHashtag = (value) => normalizeTags(value).every((tag) => HASHTAG_REGEXP.test(tag));
 
-pristine.addValidator(hashtag, isValidHashtag, errorText.validTagSymbol);
-
 const isValidHashtagCount = (value) => normalizeTags(value).length <= MAX_HASHTAG_AMOUNT;
-
-pristine.addValidator(hashtag, isValidHashtagCount, errorText.validTagCount);
 
 const isValidHashtagUnique = (value) => {
   const lowerCaseTag = normalizeTags(value).map((tag) =>
@@ -51,12 +47,10 @@ const isValidHashtagUnique = (value) => {
   return lowerCaseTag.length === new Set(lowerCaseTag).size;
 };
 
-pristine.addValidator(hashtag, isValidHashtagUnique, errorText.validTagUnique);
-
 /** Закрывает форму редактирования изображения */
 const closeForm = () => {
-  overlay.classList.add(classHidden);
-  body.classList.remove(classModalOpen);
+  overlay.classList.add(CLASS_HIDDEN);
+  document.body.classList.remove(CLASS_MODAL_OPEN);
   document.removeEventListener('keydown', onDocumentKeydown);
   cancelButton.removeEventListener('click', onCancelButtonClick);
   form.reset();
@@ -83,26 +77,49 @@ function onCancelButtonClick (evt) {
   closeForm();
 }
 
-/** Валидация при отправке формы */
-function onFormSubmit (evt) {
-  evt.preventDefault();
-  pristine.validate();
-}
+/**Блокировка кнопки отправки */
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
 
 /** Показывает форму редактирования изображения */
 const openForm = () => {
-  overlay.classList.remove(classHidden);
-  body.classList.add(classModalOpen);
+  overlay.classList.remove(CLASS_HIDDEN);
+  document.body.classList.add(CLASS_MODAL_OPEN);
   document.addEventListener('keydown', onDocumentKeydown);
   cancelButton.addEventListener('click', onCancelButtonClick);
 };
 
 const onFormChange = () => openForm();
 
+const setFormSubmit = (cb) => {
+  pristine = new Pristine(form, {
+    classTo: 'img-upload__field-wrapper',
+    errorTextParent: 'img-upload__field-wrapper',
+  });
+  pristine.addValidator(comment, validateComment);
+  pristine.addValidator(hashtag, isValidHashtag, errorText.validTagSymbol);
+  pristine.addValidator(hashtag, isValidHashtagCount, errorText.validTagCount);
+  pristine.addValidator(hashtag, isValidHashtagUnique, errorText.validTagUnique);
+  form.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
 
-const getFormActive = () => {
-  form.addEventListener('submit', onFormSubmit);
+    if (isValid) {
+      blockSubmitButton();
+      await cb(new FormData(form));
+      unblockSubmitButton();
+    }
+  });
   fileField.addEventListener('change', onFormChange);
+  initEffect();
+  initScale();
 };
 
-export { getFormActive };
+export { setFormSubmit, closeForm };
