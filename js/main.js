@@ -1,7 +1,7 @@
 import { renderPictures } from './pictures.js';
 import { closeForm} from './form.js';
 import { getData, sendData } from './api.js';
-import { showAlert } from './decor-message.js';
+import { showAlert } from './util.js';
 import { setFormSubmit } from './form.js';
 import { showErrorMessage, showSuccessMessage } from './send-message.js';
 import { initFilter, showFilters } from './sort.js';
