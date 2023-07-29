@@ -7,7 +7,7 @@ const HASHTAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i;
 const MAX_HASHTAG_AMOUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
 
-const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const IMAGE_TYPES = ['image/jpeg', 'image/gif', 'image/png'];
 
 const errorText = {
   validTagSymbol: 'Содержит недопустимые символы',
@@ -104,11 +104,10 @@ const openForm = () => {
 const onFormChange = () => openForm();
 
 /** Валидация типа файла */
-const fileChoosered = () => {
+const validateFileImage = () => {
   const file = fileChooser.files[0];
-  const fileName = file.name.toLowerCase();
 
-  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+  const matches = IMAGE_TYPES.some((it) => it === file.type);
   if (matches) {
     imagePreview.src = URL.createObjectURL(file);
     effectsPreview.forEach((effect) => {
@@ -118,7 +117,7 @@ const fileChoosered = () => {
   }
 };
 
-const onFileInputChange = () => fileChoosered();
+const onFileInputChange = () => validateFileImage();
 
 const setFormSubmit = (cb) => {
   pristine = new Pristine(form, {

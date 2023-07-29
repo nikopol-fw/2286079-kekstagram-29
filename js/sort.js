@@ -1,12 +1,17 @@
 import { renderPictures } from './pictures.js';
+import { debounce, shuffleArray } from './util.js';
+
+const FilterType = {
+  DEFAULT: 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed',
+};
 
 const RANDOM_PICTURE_COUNT = 10;
 const RERENDER_DELAY = 500;
 
 const imgFilters = document.querySelector('.img-filters');
 const imgFiltersForm = imgFilters.querySelector('.img-filters__form');
-const filterRandom = imgFilters.querySelector('#filter-random');
-const filterDiscussed = imgFilters.querySelector('#filter-discussed');
 
 /** Показать кнопки сортировки */
 const showFilters = () => imgFilters.classList.remove('img-filters--inactive');
@@ -14,38 +19,29 @@ const showFilters = () => imgFilters.classList.remove('img-filters--inactive');
 /** Сортировка "Обсуждаемые" */
 const sortComments = (a, b) => b.comments.length - a.comments.length;
 
-/** Сортировка "Случайные" */
-const shuffleArray = (array) => {
-  let j = array.length, k, i;
-  while (j) {
-    i = Math.floor(Math.random() * j--);
-    k = array[j];
-    array[j] = array[i];
-    array[i] = k;
-  }
-  return array;
-};
-
-/** Устранение дребезга */
-const debounce = (callback, timeoutDelay) => {
-  let timeoutId;
-
-  return (...rest) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
-  };
-};
-
 /** Получить отфильтрованные изображения */
-const getFilteredImg = (photos, sortButton) => {
-  if (sortButton === filterRandom) {
-    return shuffleArray(photos.slice()).slice(0, RANDOM_PICTURE_COUNT);
+const getFilteredImg = (sourcePhotos, filterType) => {
+  let filteredImage = [];
+  switch (filterType) {
+    case FilterType.RANDOM: {
+      const photos = sourcePhotos.slice();
+      filteredImage = shuffleArray(photos).slice(0, RANDOM_PICTURE_COUNT);
+      break;
+    }
+    case FilterType.DISCUSSED: {
+      const photos = sourcePhotos.slice();
+      filteredImage = photos.sort(sortComments);
+      break;
+    }
+    default: {
+      filteredImage = sourcePhotos;
+      break;
+    }
   }
-  if (sortButton === filterDiscussed) {
-    return photos.slice().sort(sortComments);
-  }
-  return photos;
+  return filteredImage;
 };
+
+const rerenderTimeout = debounce((photos, id) => renderPictures(getFilteredImg(photos, id)), RERENDER_DELAY);
 
 /** Обработчик кнопки сортировки */
 const onFilterButtonClick = (evt, photos) => {
@@ -53,14 +49,13 @@ const onFilterButtonClick = (evt, photos) => {
   const filterButton = evt.target;
   filterButton.classList.add('img-filters__button--active');
   document.querySelectorAll('.picture').forEach((photo) => photo.remove());
-  renderPictures(getFilteredImg(photos, filterButton));
+  const id = evt.target.id;
+  rerenderTimeout(photos, id);
 };
 
 /** Инциализирует сортировку */
 const initFilter = (photos) => {
-  imgFiltersForm.addEventListener('click', debounce((evt) => {
-    onFilterButtonClick(evt, photos);
-  }, RERENDER_DELAY));
+  imgFiltersForm.addEventListener('click', (evt) => onFilterButtonClick(evt, photos));
 };
 
 export { initFilter, showFilters };

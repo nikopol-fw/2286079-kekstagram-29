@@ -29,7 +29,7 @@ const load = (route, errorText, method = HttpMethod.GET, body = null) =>
 /** Получить данные с сервера */
 const getData = () => load(Route.GET_DATA, ErrorText.GET_DATA);
 
-//** Отправить данные на сервер */
+/** Отправить данные на сервер */
 const sendData = (body) => load(Route.SENT_DATA, ErrorText.SENT_DATA, HttpMethod.POST, body);
 
 export { getData, sendData };

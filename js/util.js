@@ -22,6 +22,28 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
+/** Устранение дребезга */
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+/** Сортировка "Случайные" */
+const shuffleArray = (array) => {
+  let j = array.length, k, i;
+  while (j) {
+    i = Math.floor(Math.random() * j--);
+    k = array[j];
+    array[j] = array[i];
+    array[i] = k;
+  }
+  return array;
+};
+
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export { isEscapeKey, showAlert };
+export { isEscapeKey, showAlert, debounce, shuffleArray };
