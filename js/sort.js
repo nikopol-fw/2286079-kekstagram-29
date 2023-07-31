@@ -1,4 +1,4 @@
-import { renderPictures } from './pictures.js';
+import { renderPictures, deletingPictures } from './pictures.js';
 import { debounce, shuffleArray } from './util.js';
 
 const FilterType = {
@@ -41,14 +41,16 @@ const getFilteredImg = (sourcePhotos, filterType) => {
   return filteredImage;
 };
 
-const rerenderTimeout = debounce((photos, id) => renderPictures(getFilteredImg(photos, id)), RERENDER_DELAY);
+const rerenderTimeout = debounce((photos, id) => {
+  deletingPictures();
+  renderPictures(getFilteredImg(photos, id));
+}, RERENDER_DELAY);
 
 /** Обработчик кнопки сортировки */
 const onFilterButtonClick = (evt, photos) => {
   document.querySelectorAll('.img-filters__button').forEach((button) => button.classList.remove('img-filters__button--active'));
   const filterButton = evt.target;
   filterButton.classList.add('img-filters__button--active');
-  document.querySelectorAll('.picture').forEach((photo) => photo.remove());
   const id = evt.target.id;
   rerenderTimeout(photos, id);
 };
