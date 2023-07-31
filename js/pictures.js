@@ -16,6 +16,8 @@ const createPictures = (data) => {
   return pictureElement;
 };
 
+const deletePictures = () => document.querySelectorAll('.picture').forEach((photo) => photo.remove());
+
 const renderPictures = (data) => {
   const pictureFragment = document.createDocumentFragment();
   data.forEach((picture) => {
@@ -25,5 +27,5 @@ const renderPictures = (data) => {
   picturesContainer.append(pictureFragment);
 };
 
-export {renderPictures};
+export { renderPictures, deletePictures };
 

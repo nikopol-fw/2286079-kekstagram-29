@@ -7,6 +7,8 @@ const HASHTAG_REGEXP = /^#[a-zа-яё0-9]{1,19}$/i;
 const MAX_HASHTAG_AMOUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
 
+const IMAGE_TYPES = ['image/jpeg', 'image/gif', 'image/png'];
+
 const errorText = {
   validTagSymbol: 'Содержит недопустимые символы',
   validTagCount: `Допустимо не более ${MAX_HASHTAG_AMOUNT} хэштегов`,
@@ -25,6 +27,9 @@ const cancelButton = form.querySelector('.img-upload__cancel');
 const hashtag = form.querySelector('.text__hashtags');
 const comment = form.querySelector('.text__description');
 const submitButton = form.querySelector('#upload-submit');
+const imagePreview = document.querySelector('.img-upload__preview').querySelector('img');
+const effectsPreview = document.querySelectorAll('.effects__preview');
+const fileChooser = document.querySelector('.img-upload__input[type=file]');
 
 let pristine;
 
@@ -98,6 +103,22 @@ const openForm = () => {
 
 const onFormChange = () => openForm();
 
+/** Валидация типа файла */
+const validateFileImage = () => {
+  const file = fileChooser.files[0];
+
+  const matches = IMAGE_TYPES.some((it) => it === file.type);
+  if (matches) {
+    imagePreview.src = URL.createObjectURL(file);
+    effectsPreview.forEach((effect) => {
+      effect.style.backgroundImage = `url('${imagePreview.src}')`;
+      openForm();
+    });
+  }
+};
+
+const onFileInputChange = () => validateFileImage();
+
 const setFormSubmit = (cb) => {
   pristine = new Pristine(form, {
     classTo: 'img-upload__field-wrapper',
@@ -118,6 +139,7 @@ const setFormSubmit = (cb) => {
     }
   });
   fileField.addEventListener('change', onFormChange);
+  fileField.addEventListener('change', onFileInputChange);
   initEffect();
   initScale();
 };
