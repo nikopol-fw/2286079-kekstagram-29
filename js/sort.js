@@ -1,4 +1,4 @@
-import { renderPictures, deletingPictures } from './pictures.js';
+import { renderPictures, deletePictures } from './pictures.js';
 import { debounce, shuffleArray } from './util.js';
 
 const FilterType = {
@@ -42,7 +42,7 @@ const getFilteredImg = (sourcePhotos, filterType) => {
 };
 
 const rerenderTimeout = debounce((photos, id) => {
-  deletingPictures();
+  deletePictures();
   renderPictures(getFilteredImg(photos, id));
 }, RERENDER_DELAY);
 
