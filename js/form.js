@@ -144,4 +144,4 @@ const setFormSubmit = (cb) => {
   initScale();
 };
 
-export { setFormSubmit, closeForm, onDocumentKeydown as onFormEsc };
+export { setFormSubmit, closeForm };
