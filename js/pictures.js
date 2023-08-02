@@ -5,7 +5,9 @@ const pictureTemplate = document.querySelector('#picture').content.querySelector
 
 const createPictures = (data) => {
   const pictureElement = pictureTemplate.cloneNode(true);
-  pictureElement.querySelector('.picture__img').src = data.url;
+  const pictureImgElement = pictureElement.querySelector('.picture__img');
+  pictureImgElement.src = data.url;
+  pictureImgElement.alt = data.description;
   pictureElement.querySelector('.picture__likes').textContent = data.likes;
   pictureElement.querySelector('.picture__comments').textContent = data.comments.length;
 
