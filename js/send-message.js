@@ -1,4 +1,5 @@
 import { isEscapeKey } from './util.js';
+import { onFormEsc } from './form.js';
 
 const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
 const errorMessage = errorMessageTemplate.cloneNode(true);
@@ -14,6 +15,7 @@ const closeMessage = () => {
   message.remove();
   document.removeEventListener('click', onBodyClick);
   document.removeEventListener('keydown', onDocumentKeydown);
+  document.addEventListener('keydown', onFormEsc);
 };
 
 /** Показать сообщение */
@@ -22,6 +24,7 @@ const showMessage = (message, buttonMessage) => {
   buttonMessage.addEventListener('click', closeMessage);
   document.addEventListener('keydown', onDocumentKeydown);
   document.addEventListener('click', onBodyClick);
+  document.removeEventListener('keydown', onFormEsc);
 };
 
 /** Закрытие по Escape */
@@ -46,4 +49,4 @@ function onBodyClick(evt) {
 const showSuccessMessage = () => showMessage(successMessage, successButton);
 const showErrorMessage = () => showMessage(errorMessage, errorButton);
 
-export { showErrorMessage, showSuccessMessage};
+export { showErrorMessage, showSuccessMessage };
